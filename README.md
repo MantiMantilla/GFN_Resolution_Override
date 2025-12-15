@@ -16,7 +16,9 @@ This code was written with help from AI.
 
 You must have the following software installed:
 
+  * **GeForce NOW Ultimate**
   * **`mitmproxy`**: The core proxy engine.
+
     ```bash
     pip install mitmproxy
     ```
