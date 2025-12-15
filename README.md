@@ -34,7 +34,7 @@ You must have the following software installed:
 | :--- | :--- |
 | `launch_mitm_browser.sh` | The main executable script to set up, run, and clean up the environment. |
 | `install_mitm_certs.sh` | Helper script for system/Chromium certificate installation. |
-| `resolution-interceptor.py` | The `mitmproxy` script containing the modification logic (your provided Python code). |
+| `resolution-interceptor.py` | The `mitmproxy` script containing the modification logic. |
 | `find_proxy.pac` | The Proxy Auto-Configuration script, which directs only NVIDIA traffic to the proxy. |
 
 -----
