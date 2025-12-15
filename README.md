@@ -2,6 +2,8 @@
 
 A proxy-based solution using `mitmproxy` to intercept and modify streaming session requests to NVIDIA's services, forcing a specific resolution and frame rate (1440p @ 120 FPS).
 
+Based on the excellent work by [a9udn9u](https://github.com/a9udn9u). See [this thread](https://www.reddit.com/r/linux_gaming/comments/1fn973k/geforce_now_at_1440p_and_120_fps_in_linux_chrome/).
+
 ## ⚠️ Disclaimer
 
 This tool modifies network requests to a third-party service. Use it at your own risk and ensure compliance with the service provider's terms.
