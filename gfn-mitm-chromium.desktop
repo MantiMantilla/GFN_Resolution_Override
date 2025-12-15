@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=GeForce Now (mitmproxy)
+Comment=Launch Chromium via mitmproxy for GeForce Now
+Exec=__LAUNCHER_PATH__
+Icon=chromium
+Terminal=false
+Type=Application
+Categories=Network;Game;
+StartupNotify=true

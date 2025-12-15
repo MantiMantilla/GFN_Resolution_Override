@@ -6,26 +6,8 @@ PROXY_PAC_FILE="./find_proxy.pac"
 MITM_SCRIPT="./resolution-interceptor.py"
 CERT_INSTALLER_SCRIPT="./install_mitm_certs.sh"
 
-# --- 1. Certificate Check and Installation ---
-echo "Checking and installing mitmproxy certificates..."
-if [ ! -f ~/.mitmproxy/mitmproxy-ca.pem ]; then
-    echo "mitmproxy certificate not found. Generating a new one..."
-    # Running mitmproxy once forces it to generate the default certs
-    mitmdump --no-server -s ./kill_mitmproxy.py > /dev/null 2>&1
-    if [ ! -f ~/.mitmproxy/mitmproxy-ca.pem ]; then
-        echo "Error: mitmproxy command not found or failed to generate certificates."
-        exit 1
-    fi
-fi
-
-# Attempt to install system/Chromium-specific certificates
-# The actual installation logic is complex and separated into a helper script
-if [ -f "$CERT_INSTALLER_SCRIPT" ]; then
-    bash "$CERT_INSTALLER_SCRIPT"
-else
-    echo "Warning: Certificate installation helper script ($CERT_INSTALLER_SCRIPT) not found. Skipping auto-install."
-    echo "Ensure 'mitmproxy-ca-cert.pem' is installed in your system's trust store or Chromium's NSS database."
-fi
+# Certificates and desktop entry are expected to be installed by `install.sh`.
+echo "Assuming mitmproxy certificates are already installed and trusted."
 
 # --- 2. Base64 Encode the Proxy PAC File ---
 if [ ! -f "$PROXY_PAC_FILE" ]; then

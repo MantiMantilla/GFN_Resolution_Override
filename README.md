@@ -30,46 +30,59 @@ This code was written with help from AI.
 
 | Filename | Description |
 | :--- | :--- |
-| `launch_mitm_browser.sh` | The main executable script to set up, run, and clean up the environment. |
-| `install_mitm_certs.sh` | Helper script for system/Chromium certificate installation. |
+| `install.sh` | Installer that attempts to install dependencies, generates and installs the mitmproxy CA, makes helpers executable, and installs the desktop launcher. |
+| `launch_mitm_browser.sh` | Launcher script that starts `mitmdump`, opens Chromium pointed at the PAC file, and shuts down the proxy when Chromium exits. |
+| `install_mitm_certs.sh` | Helper that generates the mitmproxy CA (if missing) and installs it system-wide and into Chromium's NSS database. |
+| `gfn-mitm-chromium.desktop` | Desktop launcher template used by `install.sh` (installed to `~/.local/share/applications`). |
 | `resolution-interceptor.py` | The `mitmproxy` script containing the modification logic. |
 | `find_proxy.pac` | The Proxy Auto-Configuration script, which directs only NVIDIA traffic to the proxy. |
+| `kill_mitmproxy.py` | Optional helper used during certificate generation to start and immediately stop mitmproxy cleanly. |
 
 -----
 
 ## 💻 Setup and Execution
 
-### 1\. Get the scripts
+### 1. Clone the repository
 
-Ensure you have saved the four required files.
+If you haven't already, clone the repo:
 
-```bash
+```sh
 git clone https://github.com/MantiMantilla/GFN_Resolution_Override
+cd GFN_Resolution_Override
 ```
 
-### 2\. Make the Scripts Executable
+### 2. Run the installer
 
-```bash
-chmod +x launch_mitm_browser.sh install_mitm_certs.sh
+The repository includes an installer script that:
+
+- attempts to install common dependencies when a supported package manager is detected (`mitmproxy`, `chromium`, `libnss3-tools` / `certutil`),
+- generates the `mitmproxy` CA if missing,
+- installs the CA into the system trust store and Chromium's NSS database,
+- makes helper scripts executable, and
+- installs a desktop launcher (`GeForce Now (mitmproxy)`) from the repository template.
+
+Run the installer (you may be prompted for your password for package installation and system certificate steps):
+
+```sh
+chmod +x ./install.sh
+./install.sh
 ```
 
-### 3\. Run the Launcher
+If the desktop launcher is installed, you can launch from your desktop menu as **GeForce Now (mitmproxy)**. The installer places the desktop file at `~/.local/share/applications/gfn-mitm-chromium.desktop`.
 
-Execute the main script. It will handle the entire process:
+### 3. Launch manually (optional)
 
-1.  Generate/check for `mitmproxy` certificates.
-2.  Attempt to install the certificates system-wide and into the Chromium/NSS database (requires `sudo` for system installation).
-3.  Launch `mitmproxy` in the background.
-4.  Launch `chromium-browser`, configured to use the PAC file to proxy NVIDIA traffic.
+If you prefer to run the launcher script directly (for example, during development), run:
 
-
-```bash
+```sh
 ./launch_mitm_browser.sh
 ```
 
-### 4\. Close the Session
+Note: `launch_mitm_browser.sh` assumes the `mitmproxy` CA has already been generated and trusted (the installer performs this). It will start `mitmdump`, open Chromium pointed at the PAC URL, and shut down `mitmdump` when Chromium exits.
 
-When you close the launched `chromium-browser` instance, the `launch_mitm_browser.sh` script will automatically detect the closure and **shut down the background `mitmproxy` server**.
+### 4. Closing
+
+When the Chromium window launched by the script is closed, `launch_mitm_browser.sh` will cleanly stop the background `mitmdump` process it started.
 
 -----
 
