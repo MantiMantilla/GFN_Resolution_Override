@@ -11,8 +11,8 @@ echo "Checking and installing mitmproxy certificates..."
 if [ ! -f ~/.mitmproxy/mitmproxy-ca.pem ]; then
     echo "mitmproxy certificate not found. Generating a new one..."
     # Running mitmproxy once forces it to generate the default certs
-    mitmproxy --version > /dev/null 2>&1
-    if [ $? -ne 0 ]; then
+    mitmdump --no-server -s ./kill_mitmproxy.py > /dev/null 2>&1
+    if [ ! -f ~/.mitmproxy/mitmproxy-ca.pem ]; then
         echo "Error: mitmproxy command not found or failed to generate certificates."
         exit 1
     fi
@@ -39,7 +39,7 @@ PROXY_PAC_URL="data:application/x-javascript-config;base64,$PAC_B64"
 # --- 3. Launch mitmproxy in the Background ---
 echo "Starting mitmproxy server..."
 # Use 'exec' to ensure the output is redirected cleanly
-mitmproxy -p $MITMPROXY_PORT -s "$MITM_SCRIPT" &
+mitmdump -p $MITMPROXY_PORT -s "$MITM_SCRIPT" &
 MITM_PID=$!
 echo "mitmproxy started with PID: $MITM_PID"
 
@@ -51,7 +51,8 @@ echo "Launching Chromium browser..."
 chromium-browser \
     --enable-features=VaapiVideoDecodeLinuxGL \
     --ozone-platform=wayland \
-    --proxy-pac-url="$PROXY_PAC_URL" \
+    --proxy-pac-url="$PROXY_PAC_URL"\
+    "https://play.geforcenow.com/mall/#/layout/games"
 CHROMIUM_EXIT_CODE=$?
 
 # --- 5. Cleanup (Shutdown mitmproxy) ---
