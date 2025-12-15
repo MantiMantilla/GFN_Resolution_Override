@@ -14,8 +14,6 @@ This code was written with help from AI.
 
 ## 🛠️ Prerequisites
 
-You must have the following software installed:
-
   * **GeForce NOW Ultimate**
   * **`mitmproxy`**: The core proxy engine.
 
